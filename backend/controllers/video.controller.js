@@ -1,3 +1,5 @@
+import Video from "../models/Video.model"
+
 export const uploadController=async(req,res)=>{
 try {
    const {videoName,description}=req.body
@@ -17,7 +19,9 @@ try {
     status:"pending",
     filePath:file.path
    })
+   // Worker queue logic can be added here to process the video asynchronously    
 
+   
 
    res.status(201).json({message:"Video uploaded successfully",videoId:video.id})
 } catch (error) {
