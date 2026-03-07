@@ -11,14 +11,9 @@ const userSchema = new mongoose.Schema(
       required: true,
       unique: true
     },
-    role:{
-      type:String,
-      required:true
-    },
     isActive:{
       type:Boolean,
       default:true
-
     },
     password: {
       type: String,

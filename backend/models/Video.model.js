@@ -8,7 +8,7 @@ const videoSchema=new mongoose.Schema({
     description:{
         type:String
     },
-    uploadeddBy:{
+    uploadedBy:{
         type:mongoose.Schema.Types.ObjectId,
         ref:"User"
     },
