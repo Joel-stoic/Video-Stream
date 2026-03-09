@@ -36,7 +36,7 @@ export const uploadController = async (req, res) => {
 
 export const getVideoControllers = async (req, res) => {
     try {
-        const videos=await Video.find({status:"completed"})
+        const videos=await Video.find({status:"pending"})
         if(!videos.length >0){
             return res.status(400).json({message:"Video not found"})
         }

@@ -9,17 +9,23 @@ export const protect = async (req, res, next) => {
     const refreshToken = req.cookies?.refreshToken;
 
     if (!accessToken) {
+      logger.warn("Access token missing");
       return res.status(401).json({ message: "Unauthorized" });
     }
 
     try {
       decoded = jwt.verify(accessToken, process.env.JWT_SECRET);
+      logger.info({ userId: decoded.id }, "Access token verified");
     } catch (err) {
       if (err.name !== "TokenExpiredError") {
+        logger.warn("Invalid access token");
         return res.status(401).json({ message: "Invalid token" });
       }
 
+      logger.info("Access token expired, trying refresh token");
+
       if (!refreshToken) {
+        logger.warn("Refresh token missing");
         return res.status(401).json({ message: "Session expired" });
       }
 
@@ -41,6 +47,8 @@ export const protect = async (req, res, next) => {
         maxAge: 15 * 60 * 1000,
       });
 
+      logger.info({ userId: refreshDecoded.id }, "New access token generated");
+
       decoded = { id: refreshDecoded.id };
     }
 
@@ -49,6 +57,7 @@ export const protect = async (req, res, next) => {
       .lean();
 
     if (!user || !user.isActive) {
+      logger.warn({ userId: decoded.id }, "User not found or inactive");
       return res.status(401).json({ message: "Unauthorized" });
     }
 
@@ -57,6 +66,8 @@ export const protect = async (req, res, next) => {
       email: user.email,
       role: user.role,
     };
+
+    logger.info({ userId: user._id }, "User authenticated");
 
     next();
   } catch (error) {
