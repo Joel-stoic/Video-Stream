@@ -3,6 +3,12 @@ import { redisConnection } from "../config/redis.js";
 import ffmpeg from "fluent-ffmpeg";
 import fs from "fs";
 import path from "path";
+import Video from "../models/Video.model.js";
+import { connectDb } from "../config/db.js";
+import dotenv from "dotenv"; // 👈 ADD THIS
+dotenv.config(); 
+connectDb()
+
 
 const worker = new Worker(
   "video-processing",
@@ -68,7 +74,7 @@ const worker = new Worker(
 `;
 
     fs.writeFileSync(path.join(outputDir, "master.m3u8"), masterPlaylist);
-
+    await Video.findByIdAndUpdate(videoId, { status: "completed" });
     console.log("Video processed:", videoId);
   },
   {

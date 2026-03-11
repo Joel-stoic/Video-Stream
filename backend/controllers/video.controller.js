@@ -35,15 +35,14 @@ export const uploadController = async (req, res) => {
 }
 
 export const getVideoControllers = async (req, res) => {
-    try {
-        const videos=await Video.find({status:"pending"})
-        if(!videos.length >0){
-            return res.status(400).json({message:"Video not found"})
-        }
-        return res.status(200).json({videos})
-    } catch (error) {
-        logger.error(err, "Failed to fetch videos");
-        res.status(500).json({ message: "Error uploading video", error: error.message })
-        console.error("Error uploading video:", error)
+  try {
+    const videos = await Video.find({ status: "completed" })
+    if (videos.length === 0) {
+      return res.status(404).json({ message: "No videos found" })
     }
+    return res.status(200).json({ videos })
+  } catch (error) {
+    console.error("Failed to fetch videos:", error)
+    res.status(500).json({ message: "Error fetching videos", error: error.message })
+  }
 }
