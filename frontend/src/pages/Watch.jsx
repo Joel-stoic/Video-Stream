@@ -2,13 +2,13 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useEffect, useState } from "react";
 import VideoPlayer from "../components/VideoPlayer";
 
+
 export default function Watch() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [videos, setVideos] = useState([]);
   const [currentVideo, setCurrentVideo] = useState(null);
   const [loading, setLoading] = useState(true);
-
   useEffect(() => {
     const fetchVideos = async () => {
       try {
@@ -35,7 +35,9 @@ export default function Watch() {
     navigate(`/watch/${video._id}`);
     setCurrentVideo(video);
   };
-
+  const onClickUpload=()=>{
+    navigate('/upload')
+  }
   const upNext = videos.filter((v) => v._id !== id);
 
   return (
@@ -53,8 +55,7 @@ export default function Watch() {
           <span className="text-white font-bold text-lg tracking-tight">StreamVault</span>
         </div>
         <div className="flex items-center gap-3">
-          <button className="text-white/50 hover:text-white text-sm transition-colors">Library</button>
-          <button className="text-white/50 hover:text-white text-sm transition-colors">Upload</button>
+          <button className="text-white/50 hover:text-white text-sm transition-colors" onClick={onClickUpload} >Upload</button>
           <div className="w-8 h-8 rounded-full bg-gradient-to-br from-orange-400 to-red-500 flex items-center justify-center text-white text-xs font-bold">U</div>
         </div>
       </nav>

@@ -9,6 +9,6 @@ const router=express.Router()
 
 router.post('/upload',protect,uploadMiddleware.single('video'),uploadController)
 
-router.get('/getVideos',getVideoControllers)
+router.get('/getVideos',protect,getVideoControllers)
 
 export default router 
