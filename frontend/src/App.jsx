@@ -1,9 +1,12 @@
-import React from 'react'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Watch from "./pages/Watch";
 
-const App = () => {
+export default function App() {
   return (
-    <div>App</div>
-  )
+    <BrowserRouter>
+      <Routes>
+        <Route path="/watch/:id" element={<Watch />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
-
-export default App
