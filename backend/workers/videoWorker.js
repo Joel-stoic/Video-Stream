@@ -6,7 +6,7 @@ import path from "path";
 import Video from "../models/Video.model.js";
 import { connectDb } from "../config/db.js";
 import dotenv from "dotenv"; // 👈 ADD THIS
-dotenv.config(); 
+dotenv.config();
 connectDb()
 
 
