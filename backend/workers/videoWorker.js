@@ -79,7 +79,11 @@ const worker = new Worker(
   },
   {
     connection: redisConnection,
-    concurrency: 2
+    concurrency: 2,
+    removeOnComplete: {
+      age: 900,
+      count: 100
+    }
   }
 );
 
