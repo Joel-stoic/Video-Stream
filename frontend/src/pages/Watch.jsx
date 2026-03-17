@@ -12,7 +12,7 @@ export default function Watch() {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/videos/getVideos", {
+        const res = await fetch("http://localhost/api/videos/getVideos", {
           credentials: "include", // sends auth cookie
         });
         const data = await res.json();

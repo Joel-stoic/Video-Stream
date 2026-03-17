@@ -24,7 +24,7 @@ export default function VideoPlayer({ videoId, title = "Untitled Video" }) {
 
   useEffect(() => {
     const video = videoRef.current;
-    const videoSrc = `http://localhost:5000/streams/${videoId}/master.m3u8`;
+    const videoSrc = `http://localhost/streams/${videoId}/master.m3u8`;
 
     if (Hls.isSupported()) {
       const hls = new Hls();
@@ -79,6 +79,48 @@ export default function VideoPlayer({ videoId, title = "Untitled Video" }) {
       video.removeEventListener("playing", onPlaying);
     };
   }, []);
+
+  useEffect(() => {
+  const interval = setInterval(() => {
+    if (!videoRef.current) return;
+
+    fetch("http://localhost/api/videos/progress" ,{
+      method: "POST",
+      credentials: "include",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        videoId,
+        currentTime: videoRef.current.currentTime,
+      }),
+    });
+  }, 5000); // every 5 sec
+
+  return () => clearInterval(interval);
+}, [videoId]);
+
+useEffect(() => {
+  const video = videoRef.current;
+  if (!video) return;
+
+  fetch(`http://localhost/api/videos/progress/${videoId}`, {
+    credentials: "include",
+  })
+    .then(res => res.json())
+    .then(data => {
+      if (!data.currentTime) return;
+
+      const setTime = () => {
+        video.currentTime = data.currentTime;
+      };
+
+      // wait until metadata is loaded
+      if (video.readyState >= 1) {
+        setTime();
+      } else {
+        video.addEventListener("loadedmetadata", setTime, { once: true });
+      }
+    });
+}, [videoId]);
 
   const resetHideTimer = useCallback(() => {
     setShowControls(true);
