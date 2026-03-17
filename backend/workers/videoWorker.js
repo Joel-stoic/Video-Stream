@@ -5,7 +5,7 @@ import fs from "fs";
 import path from "path";
 import Video from "../models/Video.model.js";
 import { connectDb } from "../config/db.js";
-import dotenv from "dotenv"; // 👈 ADD THIS
+import dotenv from "dotenv"; 
 dotenv.config();
 connectDb()
 
