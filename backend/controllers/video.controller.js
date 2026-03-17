@@ -1,6 +1,8 @@
 import logger from "../config/logger.js"
 import Video from "../models/Video.model.js"
 import { videoQueue } from "../queue/videoQueue.js"
+import WatchHistory from "../models/WatchHistory.model.js";
+
 export const uploadController = async (req, res) => {
     try {
         const { videoName, description } = req.body
@@ -46,3 +48,31 @@ export const getVideoControllers = async (req, res) => {
     res.status(500).json({ message: "Error fetching videos", error: error.message })
   }
 }
+
+
+
+// SAVE progress
+export const saveProgress = async (req, res) => {
+  const { videoId, currentTime } = req.body;
+
+  await WatchHistory.findOneAndUpdate(
+    { userId: req.user.id, videoId },
+    { currentTime },
+    { upsert: true, new: true }
+  );
+
+  res.json({ success: true });
+};
+
+
+// GET progress
+export const getProgress = async (req, res) => {
+  const { videoId } = req.params;
+
+  const data = await WatchHistory.findOne({
+    userId: req.user.id,
+    videoId,
+  });
+
+  res.json({ currentTime: data?.currentTime || 0 });
+};

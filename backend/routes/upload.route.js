@@ -1,5 +1,5 @@
 import express from 'express'
-import { getVideoControllers, uploadController } from '../controllers/video.controller.js'
+import { getProgress, getVideoControllers, saveProgress, uploadController } from '../controllers/video.controller.js'
 import { protect } from '../middleware/protect.js'
 import { uploadMiddleware } from '../config/multer.js'
 import { limiter } from '../config/ratelimiting.js'
@@ -12,4 +12,8 @@ router.post('/upload',protect,limiter,uploadMiddleware.single('video'),uploadCon
 
 router.get('/getVideos',protect,getVideoControllers)
 
-export default router 
+router.post("/progress",protect,saveProgress)
+router.get("/progress/:videoId",protect,getProgress)
+
+export default router
+
