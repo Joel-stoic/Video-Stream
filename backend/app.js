@@ -19,7 +19,6 @@ app.use(cors({
 }))
 app.use('/api/auth',authRoutes)
 app.use('/api/videos',uploadRoute)
-app.use("/streams", express.static(path.join(process.cwd(), "uploads/hls")))
 
 
 
