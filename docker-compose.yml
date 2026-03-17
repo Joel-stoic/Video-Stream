@@ -1,7 +1,13 @@
 version: "3.9"
 
 services:
-
+  frontend:
+    build: ./frontend
+    container_name: stream_frontend
+    ports:
+      - "5173:5173"
+    restart: always
+    
   backend:
     build: ./backend
     container_name: stream_backend
@@ -25,11 +31,16 @@ services:
     depends_on:
       - backend
 
-  frontend:
-    build: ./frontend
-    container_name: stream_frontend
+  nginx:
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    container_name: stream_nginx
     ports:
-      - "5173:5173"
+      - "80:80"
     volumes:
-      - ./frontend:/app
+      - ./backend/uploads:/app/uploads
+    depends_on:
+      - backend
+      - frontend
     restart: always
