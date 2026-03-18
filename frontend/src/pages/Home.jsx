@@ -10,7 +10,7 @@ export default function Home() {
   useEffect(() => {
     const fetchVideos = async () => {
       try {
-        const res = await fetch("http://localhost:5000/api/videos/getVideos", {
+        const res = await fetch("http://localhost/api/videos/getVideos", {
           credentials: "include",
         });
         const data = await res.json();
@@ -25,7 +25,7 @@ export default function Home() {
   }, []);
 
   const handleLogout = async () => {
-    await fetch("http://localhost:5000/api/auth/logout", {
+    await fetch("http://localhost/api/auth/logout", {
       method: "POST",
       credentials: "include",
     });

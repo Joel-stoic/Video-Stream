@@ -79,7 +79,7 @@ export default function Upload() {
 
         xhr.onerror = () => reject(new Error("Network error"));
 
-        xhr.open("POST", "http://localhost:5000/api/videos/upload");
+        xhr.open("POST", "http://localhost/api/videos/upload");
         xhr.withCredentials = true;
         xhr.send(formData);
       });
