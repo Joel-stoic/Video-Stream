@@ -4,15 +4,11 @@ services:
   frontend:
     build: ./frontend
     container_name: stream_frontend
-    ports:
-      - "5173:5173"
     restart: always
 
   backend:
     build: ./backend
     container_name: stream_backend
-    ports:
-      - "5000:5000"
     env_file:
       - ./backend/.env
     volumes:
@@ -31,13 +27,20 @@ services:
     depends_on:
       - backend
 
+  redis:
+    image: redis:alpine
+    container_name: stream_redis
+    ports:
+      - "6379:6379"
+    restart: always
+
   nginx:
     build:
       context: ./nginx
       dockerfile: Dockerfile
     container_name: stream_nginx
     ports:
-      - "80:80"
+      - "80:80" 
     volumes:
       - uploads_data:/app/uploads  
     depends_on:

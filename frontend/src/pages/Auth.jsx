@@ -22,8 +22,8 @@ export default function Auth() {
     setError("");
 
     const endpoint = mode === "login"
-      ? "http://localhost:5000/api/auth/login"
-      : "http://localhost:5000/api/auth/register";
+      ? "http://localhost/api/auth/login"
+      : "http://localhost/api/auth/register";
 
     const body = mode === "login"
       ? { email: form.email, password: form.password }

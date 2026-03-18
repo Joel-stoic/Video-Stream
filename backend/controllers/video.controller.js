@@ -2,6 +2,7 @@ import logger from "../config/logger.js"
 import Video from "../models/Video.model.js"
 import { videoQueue } from "../queue/videoQueue.js"
 import WatchHistory from "../models/WatchHistory.model.js";
+import { cacheRedis} from "../config/redis.js";
 
 export const uploadController = async (req, res) => {
     try {
@@ -38,10 +39,24 @@ export const uploadController = async (req, res) => {
 
 export const getVideoControllers = async (req, res) => {
   try {
+    const cached = await cacheRedis.get("completed-video")
+    
+    console.log('Cache hit:', !!cached)  // ← add this
+    
+    if(cached){
+      console.log('Serving from Redis cache')  // ← add this
+      return res.status(200).json({ videos: JSON.parse(cached) })
+    }
+
+    console.log('Fetching from MongoDB')  // ← add this
     const videos = await Video.find({ status: "completed" })
     if (videos.length === 0) {
       return res.status(404).json({ message: "No videos found" })
     }
+
+    await cacheRedis.set("completed-video", JSON.stringify(videos), 'EX', 60)
+    console.log('Saved to cache')  // ← add this
+    
     return res.status(200).json({ videos })
   } catch (error) {
     console.error("Failed to fetch videos:", error)

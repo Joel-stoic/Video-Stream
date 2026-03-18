@@ -22,6 +22,8 @@ const videoSchema=new mongoose.Schema({
     }
 },{timestamps:true})
 
+videoSchema.index({ status: 1 }) 
+
 const Video=mongoose.model("Video",videoSchema)
 
 export default Video

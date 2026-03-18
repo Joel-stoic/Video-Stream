@@ -8,3 +8,9 @@ export const redisConnection = new IORedis({
   family:4,
   maxRetriesPerRequest: null,
 });
+
+export const cacheRedis = new IORedis({
+  host: "stream_redis",  
+  port: 6379,
+  maxRetriesPerRequest: null,
+})

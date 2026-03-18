@@ -1,5 +1,5 @@
 import { Worker } from "bullmq";
-import { redisConnection } from "../config/redis.js";
+import { cacheRedis, redisConnection } from "../config/redis.js";
 import ffmpeg from "fluent-ffmpeg";
 import fs from "fs";
 import path from "path";
@@ -75,6 +75,7 @@ const worker = new Worker(
 
     fs.writeFileSync(path.join(outputDir, "master.m3u8"), masterPlaylist);
     await Video.findByIdAndUpdate(videoId, { status: "completed" });
+    await cacheRedis.del("completed-video") 
     console.log("Video processed:", videoId);
   },
   {
